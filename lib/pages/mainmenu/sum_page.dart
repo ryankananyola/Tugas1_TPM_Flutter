@@ -8,10 +8,11 @@ class SumPage extends StatefulWidget {
 
 class _SumPageState extends State<SumPage> {
   final TextEditingController _numbersController = TextEditingController();
-  String _result = '';
+  String _sumResult = '';
+  String _digitCount = '';
 
   void _calculateSum() {
-    String inputText = _numbersController.text.trim(); // Hapus spasi awal/akhir
+    String inputText = _numbersController.text.trim();
 
     if (inputText.isEmpty) {
       _showErrorSnackbar("Masukkan angka terlebih dahulu!");
@@ -23,14 +24,16 @@ class _SumPageState extends State<SumPage> {
     int sum = numbers.reduce((a, b) => a + b);
 
     setState(() {
-      _result = 'Total: $sum';
+      _digitCount = 'Jumlah Digit: ${numbers.length}';
+      _sumResult = 'Total: $sum';
     });
   }
 
   void _resetInput() {
     setState(() {
       _numbersController.clear();
-      _result = '';
+      _digitCount = '';
+      _sumResult = '';
     });
   }
 
@@ -117,10 +120,17 @@ class _SumPageState extends State<SumPage> {
                     ],
                   ),
                   SizedBox(height: 20),
-                  Text(
-                    _result,
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green),
-                  ),
+                  if (_digitCount.isNotEmpty) // Menampilkan jika ada input
+                    Text(
+                      _digitCount,
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue),
+                    ),
+                  SizedBox(height: 5),
+                  if (_sumResult.isNotEmpty) // Menampilkan jika ada hasil
+                    Text(
+                      _sumResult,
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green),
+                    ),
                 ],
               ),
             ),
