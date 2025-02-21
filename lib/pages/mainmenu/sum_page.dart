@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SumPage extends StatefulWidget {
   @override
@@ -10,11 +11,37 @@ class _SumPageState extends State<SumPage> {
   String _result = '';
 
   void _calculateSum() {
-    List<String> numbers = _numbersController.text.split(',');
-    int sum = numbers.map((e) => int.tryParse(e.trim()) ?? 0).reduce((a, b) => a + b);
+    String inputText = _numbersController.text.trim(); // Hapus spasi awal/akhir
+
+    if (inputText.isEmpty) {
+      _showErrorSnackbar("Masukkan angka terlebih dahulu!");
+      return;
+    }
+
+    // Ubah tiap digit menjadi angka
+    List<int> numbers = inputText.split('').map((e) => int.parse(e)).toList();
+    int sum = numbers.reduce((a, b) => a + b);
+
     setState(() {
       _result = 'Total: $sum';
     });
+  }
+
+  void _resetInput() {
+    setState(() {
+      _numbersController.clear();
+      _result = '';
+    });
+  }
+
+  void _showErrorSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   @override
@@ -24,27 +51,80 @@ class _SumPageState extends State<SumPage> {
         title: Text('Jumlah Total Angka'),
         backgroundColor: Colors.red,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _numbersController,
-              decoration: InputDecoration(labelText: 'Masukkan angka (pisahkan dengan koma)'),
-              keyboardType: TextInputType.text,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.redAccent, Colors.deepOrangeAccent],
+          ),
+        ),
+        child: Center(
+          child: Card(
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _calculateSum,
-              child: Text('Hitung'),
+            margin: EdgeInsets.all(20),
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Masukkan Angka (tanpa spasi atau karakter lain)",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 10),
+                  TextField(
+                    controller: _numbersController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Contoh: 1234',
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly, // Hanya angka
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: _calculateSum,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        ),
+                        child: Text('Hitung', style: TextStyle(fontSize: 16)),
+                      ),
+                      ElevatedButton(
+                        onPressed: _resetInput,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        ),
+                        child: Text('Reset', style: TextStyle(fontSize: 16)),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    _result,
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 20),
-            Text(
-              _result,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ],
+          ),
         ),
       ),
     );

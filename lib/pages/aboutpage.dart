@@ -1,58 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Tentang'),
-        backgroundColor: Colors.blue,
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildInfoRow(Icons.phone, '+62 812 3456 7890', Colors.blue),
-            _buildInfoRow(Icons.email, 'admin1234@email.com', Colors.red),
-            _buildInfoRow(FontAwesomeIcons.facebook, 'facebook.com/admin1234', Colors.blue),
-            _buildInfoRow(FontAwesomeIcons.instagram, '@admin1234', Colors.purple),
-            _buildInfoRow(FontAwesomeIcons.x, '@admin1234', Colors.lightBlue),
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            "Kontak Kami",
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pop(context);
-          } else if (index == 2) {
-            Navigator.pushNamed(context, '/profile');
-          }
-        },
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Tentang'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
-        ],
-      ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                _buildContactCard(Icons.phone, '+62 812 3456 7890', Colors.blue),
+                SizedBox(height: 12),
+                _buildContactCard(Icons.email, 'admin1234@email.com', Colors.red),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String text, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Icon(icon, color: color, size: 24),
-          SizedBox(width: 12), // Jarak antara ikon dan teks
-          Text(
-            text,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-        ],
+  Widget _buildContactCard(IconData icon, String text, Color color) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 4, // Efek bayangan
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          children: [
+            Icon(icon, color: color, size: 28), // Icon lebih besar
+            SizedBox(width: 12),
+            Text(
+              text,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
       ),
     );
   }

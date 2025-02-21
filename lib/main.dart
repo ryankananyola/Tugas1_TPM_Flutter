@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/loginpage.dart';
-import 'pages/homepage.dart';// Import halaman login
+import 'pages/homepage.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,9 +12,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter App',
-      home: LoginPage(),  // Tampilkan halaman login pertama kali
+      initialRoute: '/', // Rute awal
       routes: {
-        '/home': (context) => HomePage(),  // Buat halaman home nantinya
+        '/': (context) => LoginPage(),  // Halaman login sebagai halaman pertama
+        '/home': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+          return HomePage(username: args['username']!);
+        },
       },
     );
   }

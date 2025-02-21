@@ -7,6 +7,10 @@ import 'profilepage.dart';
 import 'aboutpage.dart';
 
 class HomePage extends StatefulWidget {
+  final String username; // Tambahkan parameter username
+
+  const HomePage({Key? key, required this.username}) : super(key: key); // Tambahkan required
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -14,18 +18,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    MainMenu(),
-    AboutPage(),
-    ProfilePage(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    // Perbaikan: Kirim username ke ProfilePage
+    final List<Widget> _pages = [
+      MainMenu(),
+      AboutPage(),
+      ProfilePage(username: widget.username), // Kirim username
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menu Utama'),
-        backgroundColor: Colors.cyanAccent,
+        title: Text('Aplikasi Sederhana'),
+        backgroundColor: Colors.cyan,
         centerTitle: true,
       ),
       body: _pages[_currentIndex], // Menampilkan halaman sesuai index
@@ -38,8 +43,8 @@ class _HomePageState extends State<HomePage> {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Tentang'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'About'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );

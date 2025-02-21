@@ -11,12 +11,44 @@ class _MathPageState extends State<MathPage> {
   String _result = '';
 
   void _calculate(bool isAddition) {
-    double num1 = double.tryParse(_num1Controller.text) ?? 0;
-    double num2 = double.tryParse(_num2Controller.text) ?? 0;
+    String num1Text = _num1Controller.text.trim();
+    String num2Text = _num2Controller.text.trim();
+
+    if (num1Text.isEmpty || num2Text.isEmpty) {
+      _showErrorSnackbar("Masukkan kedua angka terlebih dahulu!");
+      return;
+    }
+
+    double? num1 = double.tryParse(num1Text);
+    double? num2 = double.tryParse(num2Text);
+
+    if (num1 == null || num2 == null) {
+      _showErrorSnackbar("Masukkan angka yang valid!");
+      return;
+    }
+
     double result = isAddition ? num1 + num2 : num1 - num2;
     setState(() {
       _result = 'Hasil: $result';
     });
+  }
+
+  void _resetInput() {
+    setState(() {
+      _num1Controller.clear();
+      _num2Controller.clear();
+      _result = '';
+    });
+  }
+
+  void _showErrorSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   @override
@@ -26,41 +58,98 @@ class _MathPageState extends State<MathPage> {
         title: Text('Penjumlahan & Pengurangan'),
         backgroundColor: Colors.green,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _num1Controller,
-              decoration: InputDecoration(labelText: 'Angka 1'),
-              keyboardType: TextInputType.number,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.lightGreenAccent, Colors.greenAccent],
+          ),
+        ),
+        child: Center(
+          child: Card(
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
             ),
-            TextField(
-              controller: _num2Controller,
-              decoration: InputDecoration(labelText: 'Angka 2'),
-              keyboardType: TextInputType.number,
+            margin: EdgeInsets.all(20),
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Masukkan Angka",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  TextField(
+                    controller: _num1Controller,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Angka 1',
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(height: 10),
+                  TextField(
+                    controller: _num2Controller,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Angka 2',
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => _calculate(true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        ),
+                        child: Text('+', style: TextStyle(fontSize: 16)),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => _calculate(false),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        ),
+                        child: Text('-', style: TextStyle(fontSize: 16)),
+                      ),
+                      ElevatedButton(
+                        onPressed: _resetInput,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        ),
+                        child: Text('Reset', style: TextStyle(fontSize: 16)),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    _result,
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () => _calculate(true),
-                  child: Text('+'),
-                ),
-                ElevatedButton(
-                  onPressed: () => _calculate(false),
-                  child: Text('-'),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text(
-              _result,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ],
+          ),
         ),
       ),
     );
