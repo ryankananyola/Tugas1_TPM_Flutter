@@ -1,16 +1,5 @@
-# tugas2klpflutter
+Screenshot
+![image](https://github.com/user-attachments/assets/9ad2d624-4771-414f-b4fa-b0e1d993bd14) ![image](https://github.com/user-attachments/assets/e6d112c9-bf86-41a3-af1c-81280c636e45)
 
-A new Flutter project.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
